@@ -1,9 +1,8 @@
 Lexema,token,tipo,constante
 ¿,¿, , 
 Pedro,ID,SUST,SI
-ha,ID,ID, 
-ganado,ID,ID, 
-una,ID,ID, 
-medalla,ID,ID, 
-olimpica,ID,ID, 
+ha,ID,MODAL, 
+ganado,ID,VERB,SI
+una,ID,DET, 
+medalla,ID,SUST,SI
 ?,?, , 

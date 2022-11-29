@@ -13,8 +13,14 @@ class Lexico:
         for i in self.list:
             tokenit = TokenAfd(''.join(i))
             if tokenit.automataId():
-                if ''.join(i)=='Pedro' or ''.join(i)=='Juan':
+                if ''.join(i)=='Pedro' or ''.join(i)=='Juan' or ''.join(i)=='medalla' or ''.join(i)=='futbol':
                     self.tabla.append([''.join(i), 'ID', 'SUST', 'SI'])
+                elif ''.join(i)=='ha':
+                    self.tabla.append([''.join(i), 'ID', 'MODAL', ' '])
+                elif ''.join(i)=='una':
+                    self.tabla.append([''.join(i), 'ID', 'DET', ' '])
+                elif ''.join(i)=='jugado' or ''.join(i)=='ganado':
+                    self.tabla.append([''.join(i), 'ID', 'VERB', 'SI'])
                 else:
                     self.tabla.append([''.join(i), 'ID', 'ID', ' '])
             elif tokenit.automataInt():
