@@ -160,7 +160,7 @@ class Interface():
                 tk2 = tk2 + self.tabla[i][2] + " "
             self.entryTkLexico1.insert(0,tk1)
             self.entryTkLexico2.insert(0,tk2)
-            self.entryErrorLexico.insert(0,"Error en la palabra\n"+analizador.palabraError)
+            self.entryErrorLexico.insert(0,"Palabra "+analizador.palabraError)
 
 
 
