@@ -2,6 +2,7 @@ import tkinter
 from tkinter import *
 from tkinter import font as font
 from Control.Lexico import Lexico
+from Model.TablaSimbolos import TablaSimbolo as ts
 import csv
 
 class Interface():
@@ -133,6 +134,7 @@ class Interface():
                 self.entryOracion.insert(0,''.join(row))
     def lexico(self):
         analizador = Lexico(self.entryOracion.get())
+
         tk1=""
         tk2=""
         self.entryTkLexico1.delete(0,"end")
@@ -147,6 +149,9 @@ class Interface():
                 tk2 = tk2 + self.tabla[i][2] + " "
             self.entryTkLexico1.insert(0,tk1)
             self.entryTkLexico2.insert(0,tk2)
+            tabla = ts(self.tabla)
+            tabla.generarTabla()
+
         else:
             self.entryTkLexicoConfirma.insert(0,"Hay un error en el analisis")
             self.tabla = analizador.tabla
