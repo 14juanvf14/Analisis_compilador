@@ -1,3 +1,3 @@
 # Analisis_compilador
 
-Realizada por Juan Vasquez F
+Realizada por Juan Vasquez Franco
