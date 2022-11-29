@@ -127,7 +127,7 @@ class Interface():
         self.label10.place(x=720, y=320)
 
     def leer(self):
-        with open('preguntas.csv', newline='') as csvfile:
+        with open('../Model/preguntas.csv', newline='') as csvfile:
             spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
             for row in spamreader:
                 self.entryOracion.delete(0,"end")

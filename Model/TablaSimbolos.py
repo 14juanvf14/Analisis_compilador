@@ -5,4 +5,4 @@ class TablaSimbolo:
         self.tabla = tabla
 
     def generarTabla(self):
-        np.savetxt("juanesgei.csv", self.tabla, delimiter =",",fmt ='% s')
+        np.savetxt("../Model/tabla_Simbolos.csv", self.tabla, delimiter =",",fmt ='% s')
