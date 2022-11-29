@@ -12,11 +12,11 @@ class Primerosiguiente():
         "AUX":[["MODAL"]]
     }
     def __init__(self):
-        self.list=[['','','',''],
-                   ['','','',''],
-                   ['','','',''],
-                   ['','','',''],
-                   ['','','','']]
+        self.list=[[[],[],[],[]],
+                   [[],[],[],[]],
+                   [[],[],[],[]],
+                   [[],[],[],[]],
+                   [[],[],[],[]]]
         self.listaFist= {}
         self.listFollow={}
 
@@ -117,6 +117,3 @@ class Primerosiguiente():
         np.savetxt("../Model/tabla_Sinta.csv", self.list, delimiter =";",fmt ='% s')
 
 
-
-Carro = Primerosiguiente()
-Carro.main()

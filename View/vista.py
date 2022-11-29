@@ -2,6 +2,8 @@ import tkinter
 from tkinter import *
 from tkinter import font as font
 from Control.Lexico import Lexico
+from Control.Sintactico import Sintax
+from Model.TablaAS import Primerosiguiente
 from Model.TablaSimbolos import TablaSimbolo as ts
 import csv
 
@@ -11,7 +13,8 @@ class Interface():
         root.title("Compilador Quiroga - Vasquez")
         root.config(bg="#1B2631")
         root.resizable(0, 0)
-        
+
+
         self.miFrame = Frame()
         self.miFrame.pack(fill="both", expand=True)
         self.miFrame.config(bg="#1B2631")
@@ -26,10 +29,10 @@ class Interface():
         self.boton1 = Button(self.miFrame, text="Analisis \nLexico", activebackground="#006EB8", activeforeground="#FFF", background="#015289", foreground="#FFF", border=0, command= lambda: self.lexico())
         self.boton1['font']=self.myFont
         self.boton1.place(x=90, y=20, width=150, height=60)
-        self.boton2 = Button(self.miFrame, text="Analisis \nSintactico", activebackground="#006EB8", activeforeground="#FFF", background="#015289", foreground="#FFF", border=0)
+        self.boton2 = Button(self.miFrame, text="Analisis \nSintactico", activebackground="#006EB8", activeforeground="#FFF", background="#015289", foreground="#FFF", border=0, command= lambda: self.sintactico())
         self.boton2['font']=self.myFont
         self.boton2.place(x=430, y=20, width=150, height=60)
-        self.boton3 = Button(self.miFrame, text="Generar \nrespuesta", activebackground="#006EB8", activeforeground="#FFF", background="#015289", foreground="#FFF", border=0)
+        self.boton3 = Button(self.miFrame, text="Generar \nrespuesta", activebackground="#006EB8", activeforeground="#FFF", background="#015289", foreground="#FFF", border=0, command= lambda: self.respuesta())
         self.boton3['font']=self.myFont
         self.boton3.place(x=770, y=20, width=150, height=60)
 
@@ -79,12 +82,9 @@ class Interface():
         self.boton6 = Button(self.miFrame, text="Cargar \nPreguntas", activebackground="#006EB8", activeforeground="#FFF", background="#015289", foreground="#FFF", border=0, command= lambda: self.leer())
         self.boton6['font']=self.myFont
         self.boton6.place(x=90, y=640, width=150, height=60)
-        self.boton4 = Button(self.miFrame, text="Cargar \nRespuestas", activebackground="#006EB8", activeforeground="#FFF", background="#015289", foreground="#FFF", border=0)
+        self.boton4 = Button(self.miFrame, text="Cargar \nRespuestas", activebackground="#006EB8", activeforeground="#FFF", background="#015289", foreground="#FFF", border=0, command= lambda: self.cargaRespuesta())
         self.boton4['font']=self.myFont
-        self.boton4.place(x=430, y=640, width=150, height=60)
-        self.boton5 = Button(self.miFrame, text="Cargar \nT Simbolos", activebackground="#006EB8", activeforeground="#FFF", background="#015289", foreground="#FFF", border=0)
-        self.boton5['font']=self.myFont
-        self.boton5.place(x=770, y=640, width=150, height=60)
+        self.boton4.place(x=770, y=640, width=150, height=60)
 
         self.label3 = Label(self.miFrame, background="#1B2631", text="O", foreground="#FFF")
         self.label3['font']=self.myFont2
@@ -135,8 +135,9 @@ class Interface():
     def lexico(self):
         analizador = Lexico(self.entryOracion.get())
 
-        tk1=""
-        tk2=""
+        self.tk1=""
+        self.tk2=""
+
         self.entryTkLexico1.delete(0,"end")
         self.entryTkLexico2.delete(0,"end")
         self.entryErrorLexico.delete(0, "end")
@@ -145,10 +146,10 @@ class Interface():
             self.entryTkLexicoConfirma.insert(0,"Analisis realizado correctamente")
             self.tabla = analizador.tabla
             for i in range(1, len(self.tabla)):
-                tk1 = tk1 + self.tabla[i][1] + " "
-                tk2 = tk2 + self.tabla[i][2] + " "
-            self.entryTkLexico1.insert(0,tk1)
-            self.entryTkLexico2.insert(0,tk2)
+                self.tk1 = self.tk1 + self.tabla[i][1] + " "
+                self.tk2 = self.tk2 + self.tabla[i][2] + " "
+            self.entryTkLexico1.insert(0,self.tk1)
+            self.entryTkLexico2.insert(0,self.tk2)
             tabla = ts(self.tabla)
             tabla.generarTabla()
 
@@ -156,11 +157,55 @@ class Interface():
             self.entryTkLexicoConfirma.insert(0,"Hay un error en el analisis")
             self.tabla = analizador.tabla
             for i in range(1, len(self.tabla)):
-                tk1 = tk1 + self.tabla[i][1] + " "
-                tk2 = tk2 + self.tabla[i][2] + " "
-            self.entryTkLexico1.insert(0,tk1)
-            self.entryTkLexico2.insert(0,tk2)
+                self.tk1 = self.tk1 + self.tabla[i][1] + " "
+                self.tk2 = self.tk2 + self.tabla[i][2] + " "
+            self.entryTkLexico1.insert(0,self.tk1)
+            self.entryTkLexico2.insert(0,self.tk2)
             self.entryErrorLexico.insert(0,"Palabra "+analizador.palabraError)
+
+    def sintactico(self):
+        self.entrySintactico.delete(0, "end")
+        self.entryErrorSintactico.delete(0, "end")
+        primero = Primerosiguiente()
+        primero.main()
+        self.listica = primero.list
+        segundo = Sintax(self.tk2, self.listica)
+        if(segundo.analiza()):
+            self.entrySintactico.insert(0,"Analisis sintactico correcto")
+        else:
+            self.entrySintactico.insert(0,"Analisis sintactico con error")
+            self.entryErrorSintactico.insert(0,self.tabla[segundo.palabraError+1][0])
+
+    def cargaRespuesta(self):
+        self.respuestas=[]
+        with open('../Model/respuestas.csv', newline='') as csvfile:
+            spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+            for row in spamreader:
+                self.respuestas.append("".join(row))
+    def respuesta(self):
+
+        self.entryRespuesta.delete(0,"end")
+
+        if self.entryOracion.get() == '¿ Pedro ha ganado una medalla ?':
+            self.entryRespuesta.insert(0, self.respuestas[0])
+        elif self.entryOracion.get() == '¿ Juan ha jugado futbol ?':
+            self.entryRespuesta.insert(0, self.respuestas[1])
+        else:
+            self.entryRespuesta.insert(0, self.respuestas[0])
+
+        analizador = Lexico( self.entryRespuesta.get())
+        self.tk3=""
+        self.tk4=""
+
+        self.entryTkRespuesta1.delete(0,"end")
+        self.entryTkRespuesta2.delete(0,"end")
+
+        if analizador.analizador():
+            for i in range(1, len(self.tabla)):
+                self.tk3 = self.tk3 + self.tabla[i][1] + " "
+                self.tk4 = self.tk4 + self.tabla[i][2] + " "
+            self.entryTkRespuesta1.insert(0,self.tk3)
+            self.entryTkRespuesta2.insert(0,self.tk4)
 
 
 
