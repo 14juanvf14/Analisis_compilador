@@ -1,6 +1,7 @@
 import tkinter
 from tkinter import *
 from tkinter import font as font
+from Control.Lexico import Lexico
 import csv
 
 class Interface():
@@ -21,7 +22,7 @@ class Interface():
         self.myFont= font.Font(family='Roboto', size=12)
         self.myFont2= font.Font(family='Roboto', size=14)
 
-        self.boton1 = Button(self.miFrame, text="Analisis \nLexico", activebackground="#006EB8", activeforeground="#FFF", background="#015289", foreground="#FFF", border=0)
+        self.boton1 = Button(self.miFrame, text="Analisis \nLexico", activebackground="#006EB8", activeforeground="#FFF", background="#015289", foreground="#FFF", border=0, command= lambda: self.lexico())
         self.boton1['font']=self.myFont
         self.boton1.place(x=90, y=20, width=150, height=60)
         self.boton2 = Button(self.miFrame, text="Analisis \nSintactico", activebackground="#006EB8", activeforeground="#FFF", background="#015289", foreground="#FFF", border=0)
@@ -35,39 +36,39 @@ class Interface():
         self.entryOracion['font'] = self.myFont2
         self.entryOracion.place(x=90, y=120, width=600, height=50)
 
-        self.entryTkLexico1 = Entry(self.miFrame, state='readonly')
+        self.entryTkLexico1 = Entry(self.miFrame)
         self.entryTkLexico1['font'] = self.myFont2
         self.entryTkLexico1.place(x=90, y=180, width=600, height=50)
 
-        self.entryTkLexicoConfirma = Entry(self.miFrame, state='readonly')
+        self.entryTkLexicoConfirma = Entry(self.miFrame)
         self.entryTkLexicoConfirma['font'] = self.myFont2
         self.entryTkLexicoConfirma.place(x=90, y=240, width=600, height=50)
 
-        self.entryTkLexico2 = Entry(self.miFrame, state='readonly')
+        self.entryTkLexico2 = Entry(self.miFrame)
         self.entryTkLexico2['font'] = self.myFont2
         self.entryTkLexico2.place(x=90, y=300, width=600, height=50)
 
-        self.entrySintactico = Entry(self.miFrame, state='readonly')
+        self.entrySintactico = Entry(self.miFrame)
         self.entrySintactico['font'] = self.myFont2
         self.entrySintactico.place(x=90, y=360, width=600, height=50)
 
-        self.entryRespuesta = Entry(self.miFrame, state='readonly')
+        self.entryRespuesta = Entry(self.miFrame)
         self.entryRespuesta['font'] = self.myFont2
         self.entryRespuesta.place(x=90, y=420, width=600, height=50)
 
-        self.entryTkRespuesta1 = Entry(self.miFrame, state='readonly')
+        self.entryTkRespuesta1 = Entry(self.miFrame)
         self.entryTkRespuesta1['font'] = self.myFont2
         self.entryTkRespuesta1.place(x=90, y=480, width=600, height=50)
 
-        self.entryTkRespuesta2 = Entry(self.miFrame, state='readonly')
+        self.entryTkRespuesta2 = Entry(self.miFrame)
         self.entryTkRespuesta2['font'] = self.myFont2
         self.entryTkRespuesta2.place(x=90, y=540, width=600, height=50)
 
-        self.entryErrorLexico= Entry(self.miFrame, state='readonly')
+        self.entryErrorLexico= Entry(self.miFrame)
         self.entryErrorLexico['font'] = self.myFont2
         self.entryErrorLexico.place(x=720, y=180, width=200, height=110)
 
-        self.entryErrorSintactico= Entry(self.miFrame, state='readonly')
+        self.entryErrorSintactico= Entry(self.miFrame)
         self.entryErrorSintactico['font'] = self.myFont2
         self.entryErrorSintactico.place(x=720, y=360, width=200, height=110)
 
@@ -128,7 +129,33 @@ class Interface():
         with open('preguntas.csv', newline='') as csvfile:
             spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
             for row in spamreader:
+                self.entryOracion.delete(0,"end")
                 self.entryOracion.insert(0,''.join(row))
+    def lexico(self):
+        analizador = Lexico(self.entryOracion.get())
+        tk1=""
+        tk2=""
+        self.entryTkLexico1.delete(0,"end")
+        self.entryTkLexico2.delete(0,"end")
+        self.entryErrorLexico.delete(0, "end")
+        self.entryTkLexicoConfirma.delete(0,"end")
+        if analizador.analizador():
+            self.entryTkLexicoConfirma.insert(0,"Analisis realizado correctamente")
+            self.tabla = analizador.tabla
+            for i in range(1, len(self.tabla)):
+                tk1 = tk1 + self.tabla[i][1] + " "
+                tk2 = tk2 + self.tabla[i][2] + " "
+            self.entryTkLexico1.insert(0,tk1)
+            self.entryTkLexico2.insert(0,tk2)
+        else:
+            self.entryTkLexicoConfirma.insert(0,"Hay un error en el analisis")
+            self.tabla = analizador.tabla
+            for i in range(1, len(self.tabla)):
+                tk1 = tk1 + self.tabla[i][1] + " "
+                tk2 = tk2 + self.tabla[i][2] + " "
+            self.entryTkLexico1.insert(0,tk1)
+            self.entryTkLexico2.insert(0,tk2)
+            self.entryErrorLexico.insert(0,"Error en la palabra\n"+analizador.palabraError)
 
 
 

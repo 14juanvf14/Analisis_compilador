@@ -30,5 +30,3 @@ class Lexico:
             return False
         else:
             return True
-Perro = Lexico("¿. Pedro es hombre ?")
-Perro.analizador()
